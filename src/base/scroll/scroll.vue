@@ -28,6 +28,10 @@ export default {
     pullup: {
       type: Boolean,
       default: false
+    },
+    beforeScroll: {
+      type: Boolean,
+      default: false
     }
   },
   mounted () {
@@ -51,11 +55,18 @@ export default {
           self.$emit('scroll', pos)
         })
       }
+      // 对外派发一个上拉到底的事件
       if (this.pullup) {
         this.scroll.on('scrollEnd', () => {
           if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
             this.$emit('scrollToEnd')
           }
+        })
+      }
+      // 对外派发滚动事件
+      if (this.beforeScroll) {
+        this.scroll.on('beforeScrollStart', () => {
+          this.$emit('beforeScroll')
         })
       }
     },
