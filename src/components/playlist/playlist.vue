@@ -24,7 +24,7 @@
   	  	  </transition-group>
   	  	</scroll>
   	  	<div class="list-operate">
-  	  	  <div class="add">
+  	  	  <div class="add" @click="addSong">
   	  	  	<i class="icon-add"></i>
   	  	  	<span class="text">添加歌曲到列表</span>
   	  	  </div>
@@ -34,6 +34,7 @@
   	  	</div>
   	  </div>
   	  <confirm @confirm="confirmClear" ref="confirm" text="是否清空播放列表" confirmBtnText="清空"></confirm>
+  	  <add-song ref="addSong"></add-song>
   	</div>
   </transition>
 </template>
@@ -44,6 +45,7 @@ import {playMode} from 'common/js/config'
 import Scroll from 'base/scroll/scroll'
 import Confirm from 'base/confirm/confirm'
 import {playerMixin} from 'common/js/mixin'
+import AddSong from 'components/add-song/add-song'
 export default {
   mixins: [playerMixin],
   data () {
@@ -108,6 +110,9 @@ export default {
       this.deleteSongList()
       this.hide()
     },
+    addSong () {
+      this.$refs.addSong.show()
+    },
 //  ...mapMutations({
 //    setCurrentIndex: 'SET_CURRENT_INDEX',
 //    setPlayingState: 'SET_PLAYING_STATE'
@@ -127,13 +132,14 @@ export default {
   },
   components: {
     Scroll,
-    Confirm
+    Confirm,
+    AddSong
   }
 }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped="scoped">
-   @import "~common/stylus/variable"
+  @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
   .playlist
