@@ -1,3 +1,4 @@
+// 把对象封装成一个类
 export default class Singer {
   constructor ({id, name, mid}) {
     this.id = id

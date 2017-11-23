@@ -53,7 +53,7 @@ export default {
     }
   },
   created () {
-    this._getRecommend()
+    this._getRecommend() // 获取推荐页面轮播图数据
     setTimeout(() => {
       this._getDiscList()
     }, 1000)
@@ -70,6 +70,7 @@ export default {
       })
       this.setDisc(item)
     },
+    // 获取推荐页面轮播图数据的方法
     _getRecommend () {
       getRecommend().then((res) => {
         if (res.code === ERR_OK) {
@@ -86,7 +87,9 @@ export default {
         }
       })
     },
+    // 监听image的load事件，确保slider图片加载后better-scroll重新refresh()计算高度
     loadImage () {
+      // 设置一个标志位，为使里面的方法只执行一次，以达到性能的优化
       if (!this.checkLoaded) {
         this.checkLoaded = true
         this.$refs.scroll.refresh()

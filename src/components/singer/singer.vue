@@ -1,7 +1,7 @@
 <template>
   <div class="singer" ref="singer">
   	<list-view @select="selectSinger" :data = "singers" ref="list"></list-view>
-  	<router-view></router-view>
+  	<router-view></router-view> <!--挂载子路由-->
   </div>
 </template>
 
@@ -30,7 +30,7 @@ export default {
       this.$refs.singer.style.bottom = bottom
       this.$refs.list.refresh()
     },
-    // 监听从子组件派发的点击事件，实现路由跳转
+    // 监听从子组件派发的点击事件，实现路由跳转到子路由
     selectSinger (Singer) {
       this.$router.push({
         path: `/singer/${Singer.id}`
@@ -52,6 +52,7 @@ export default {
           items: []
         }
       }
+      // 遍历入参list
       list.forEach((item, index) => {
         // 获取热门歌手列表信息（前10位歌手信息）
         if (index < HOT_SINGER_LEN) {
@@ -61,7 +62,7 @@ export default {
             name: item.Fsinger_name
           }))
         }
-        // 获取其他歌手列表信息
+        // 获取其他歌手列表信息,判断map里是否有key值，如没有则给这个map添加key值
         const key = item.Findex
         if (!map[key]) {
           map[key] = {
@@ -69,13 +70,14 @@ export default {
             items: []
           }
         }
+        // 往map[key]里填充相关数据
         map[key].items.push(new Singer({
           id: item.Fsinger_id,
           mid: item.Fsinger_mid,
           name: item.Fsinger_name
         }))
       })
-// 为了得到有序列表，我们需要处理map
+      // 为了得到有序列表，我们需要处理map，把map转换成有序列表
       let hot = []
       let ret = []
       for (let key in map) {
@@ -86,6 +88,7 @@ export default {
           hot.push(val)
         }
       }
+      // ret列表按a~z的ASCII码排序
       ret.sort((a, b) => {
         return a.title.charCodeAt(0) - b.title.charCodeAt(0)
       })

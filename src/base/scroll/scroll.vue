@@ -21,6 +21,7 @@ export default {
       type: Array,
       default: null
     },
+    // 作用是否要better-scroll去监听滚动事件
     listenScroll: {
       type: Boolean,
       default: false
@@ -32,6 +33,10 @@ export default {
     beforeScroll: {
       type: Boolean,
       default: false
+    },
+    refreshDelay: {
+      type: Number,
+      default: 20
     }
   },
   mounted () {
@@ -48,10 +53,10 @@ export default {
         probeType: this.probeType,
         click: this.click
       })
-      // scroll组件派发的滚动事件以获取滚动位置
+      // 如果scroll监听了滚动事件，scroll组件派发的滚动事件以获取滚动位置
       if (this.listenScroll) {
         let self = this
-        this.scroll.on('scroll', (pos) => {
+        this.scroll.on('scroll', (pos) => { // pos 是一个对象，有x, y的属性
           self.$emit('scroll', pos)
         })
       }
@@ -79,6 +84,7 @@ export default {
     refresh () {
       this.scroll && this.scroll.refresh()
     },
+    // better-scroll封装的方法，滚动到相依位置
     scrollTo () {
       this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
     },
@@ -90,7 +96,7 @@ export default {
     data () {
       setTimeout(() => {
         this.refresh()
-      }, 20)
+      }, this.refreshDelay)
     }
   }
 }

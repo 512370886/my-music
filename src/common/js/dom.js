@@ -1,3 +1,4 @@
+// 给元素增加class
 export function addClass (el, className) {
   console.log(hasClass(el, className))
   if (hasClass(el, className)) {
@@ -7,11 +8,12 @@ export function addClass (el, className) {
   newClass.push(className)
   el.className = newClass.join(' ')
 }
+// 判断元素中是否有class
 export function hasClass (el, className) {
   let reg = new RegExp('(^|\\s)' + className + '(\\s|$)')
   return reg.test(el.className)
 }
-
+// 获取dom属性的方法
 export function getData (el, name, val) {
   const prefix = 'data-'
   name = prefix + name
