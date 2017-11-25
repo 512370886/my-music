@@ -25,19 +25,22 @@ export default {
     bgImage () {
       return this.singer.avatar
     },
+    // 从vuex取在组件singer里写入的歌手数据
     ...mapGetters([
       'singer'
     ])
   },
   created () {
-    this._getDetail()
+    this._getDetail() // 获取歌手列表详情数据
     console.log(this.singer)
   },
   methods: {
     _getDetail: function () {
+      // 在当前页面刷新获取不到this.singer.mid时回退到歌手页面，处理一些边界情况的常用手段
       if (!this.singer.mid) {
         this.$router.push('/singer')
       }
+      // 获取歌手列表详情数据
       getSingerDetail(this.singer.mid).then((res) => {
         if (res.code === ERR_OK) {
           this.songs = this._normalLizeSongs(res.data.list)

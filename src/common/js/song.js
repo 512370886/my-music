@@ -3,6 +3,7 @@ import {ERR_OK} from 'api/config'
 import {Base64} from 'js-base64'
 
 export default class Song {
+  // 当传入的数据比较多是，可以传入一个对象
   constructor ({id, mid, singer, name, album, duration, image, url}) {
     this.id = id
     this.mid = mid
