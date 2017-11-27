@@ -151,8 +151,9 @@ export default {
       return this.currentTime / this.currentSong.duration
     },
     ...mapGetters([
-      'fullScreen',
-      'playing',
+      'fullScreen', // 从vuex取到fullScreen来控制播放器的展开收起状态
+      'playlist', // 从vuex取得播放列表
+      'playing', 
       'currentIndex'
     ])
   },

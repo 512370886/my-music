@@ -5,6 +5,7 @@ export const playlist = state => state.playlist
 export const sequenceList = state => state.sequenceList
 export const mode = state => state.mode
 export const currentIndex = state => state.currentIndex
+// 利用getters的计算属性来计算出currentSong
 export const currentSong = (state) => {
   return state.playlist[state.currentIndex] || {}
 }

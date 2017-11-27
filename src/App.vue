@@ -5,7 +5,7 @@
     <keep-alive>
     	<router-view></router-view>
     </keep-alive>
-    <player></player>
+    <player></player> <!--应用相关的播放器，在任何路由下都可以播放，切换路由不会影响播发器的播放-->
   </div>
 </template>
 

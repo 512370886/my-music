@@ -21,7 +21,7 @@ export default {
       type: Array,
       default: null
     },
-    // 作用是否要better-scroll去监听滚动事件
+    // 作用是否要better-scroll去监听滚动事件，为true时需要，为false时不需要
     listenScroll: {
       type: Boolean,
       default: false
@@ -57,21 +57,21 @@ export default {
       if (this.listenScroll) {
         let self = this
         this.scroll.on('scroll', (pos) => { // pos 是一个对象，有x, y的属性
-          self.$emit('scroll', pos)
+          self.$emit('scroll', pos) // 向外派发了以个scroll事件
         })
       }
       // 对外派发一个上拉到底的事件
       if (this.pullup) {
         this.scroll.on('scrollEnd', () => {
           if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
-            this.$emit('scrollToEnd')
+            this.$emit('scrollToEnd') // 向外派发一个scrollToEnd事件
           }
         })
       }
       // 对外派发滚动事件
       if (this.beforeScroll) {
         this.scroll.on('beforeScrollStart', () => {
-          this.$emit('beforeScroll')
+          this.$emit('beforeScroll') // 向外派发一个beforeScroll事件
         })
       }
     },

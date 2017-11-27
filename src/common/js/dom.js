@@ -24,9 +24,10 @@ export function getData (el, name, val) {
   }
 }
 
-let elementStyle = document.createElement('div').style
+let elementStyle = document.createElement('div').style // 原生浏览器api操作
 
 let vendor = (() => {
+  // 各大浏览器供应商所对应的transform 的name
   let transformNames = {
     webkit: 'webkitTransform',
     Moz: 'MozTransform',
@@ -39,7 +40,7 @@ let vendor = (() => {
       return key
     }
   }
-  return false
+  return false // 如果上面的transform name都不支持，则这个浏览器有问题，直接返回false
 })()
 
 export function prefixStyle (style) {

@@ -3,7 +3,7 @@ import {ERR_OK} from 'api/config'
 import {Base64} from 'js-base64'
 
 export default class Song {
-  // 当传入的数据比较多是，可以传入一个对象
+  // 构造一个song类，当传入的数据比较多是，可以传入一个对象
   constructor ({id, mid, singer, name, album, duration, image, url}) {
     this.id = id
     this.mid = mid
@@ -30,8 +30,9 @@ export default class Song {
     })
   }
 }
-
+// 抽象出来的工厂方法
 export function createSong (musicData) {
+  // 实例化一个对象Song
   return new Song({
     id: musicData.songid,
     mid: musicData.songmid,
@@ -43,12 +44,14 @@ export function createSong (musicData) {
     url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
   })
 }
-
+// 数组过滤方法，传入一个数组，返回一个新数组，数组里面只有名字name
 export function filterSinger (singer) {
   let ret = []
+  // 边界处理
   if (!singer) {
     return ''
   }
+  // 数组遍历 
   singer.forEach((s) => {
     ret.push(s.name)
   })

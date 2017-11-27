@@ -35,7 +35,7 @@ export default {
       this.$router.push({
         path: `/singer/${Singer.id}`
       })
-      this.setSinger(Singer)
+      this.setSinger(Singer) // 歌手数据传入vuex
     },
     _getSingerList () {
       getSingerList().then((res) => {

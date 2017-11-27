@@ -17,6 +17,7 @@
 <script type="text/ecmascript-6">
 export default {
   props: {
+    // 接收从music-list父组件传过来的数据
     songs: {
       type: Array,
       default: []
@@ -28,7 +29,7 @@ export default {
   },
   methods: {
     selectItem (item, index) {
-      this.$emit('select', item, index)
+      this.$emit('select', item, index) // 派发一个select事件，告诉父组件我被点击了以及被点击的元素是什么他的索引是什么，以便父组件可以监听得到
     },
     getDesc (song) {
       return `${song.singer} · ${song.album}`

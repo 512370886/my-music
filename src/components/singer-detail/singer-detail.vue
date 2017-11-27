@@ -15,7 +15,7 @@ import MusicList from 'components/music-list/music-list.vue'
 export default {
   data () {
     return {
-      songs: []
+      songs: [] // 歌手详情页的歌曲列表
     }
   },
   computed: {
@@ -43,7 +43,7 @@ export default {
       // 获取歌手列表详情数据
       getSingerDetail(this.singer.mid).then((res) => {
         if (res.code === ERR_OK) {
-          this.songs = this._normalLizeSongs(res.data.list)
+          this.songs = this._normalLizeSongs(res.data.list) // 歌手详情页的歌曲列表负值
           console.log(this.songs)
         }
       })
@@ -51,7 +51,7 @@ export default {
     _normalLizeSongs (list) {
       let ret = []
       list.forEach((item) => {
-        let {musicData} = item
+        let {musicData} = item // 对象结构负值，即一个新对象的值等于上面遍历出来的对象item，拿到musicData的一个对象
         if (musicData.songid && musicData.albummid) {
           ret.push(createSong(musicData))
         }
