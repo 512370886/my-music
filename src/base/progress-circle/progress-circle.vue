@@ -3,6 +3,7 @@
   	<svg :width="radius" :height="radius" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
   	  <circle class="progress-background" r="50" cx="50" cy="50" fill="transparent"/>
   	  <circle class="progress-bar" r="50" cx="50" cy="50" :stroke-dasharray="dashArray" :stroke-dashoffset="dashOffset"/>
+  	  <!--stroke-dasharray表示描边，stroke-dashoffset描边的偏移-->
   	</svg>
   	<slot></slot>
   </div>
@@ -11,10 +12,12 @@
 <script type="text/ecmascript-6">
 export default {
   props: {
+    // 从父组件传入的半径值
     radius: {
       type: Number,
       default: 100
     },
+    // 从父组件传入的播放比例
     percent: {
       type: Number,
       default: 0
@@ -22,12 +25,12 @@ export default {
   },
   data () {
     return {
-      dashArray: Math.PI * 100
+      dashArray: Math.PI * 100 // 圆的周长
     }
   },
   computed: {
     dashOffset () {
-      return (1 - this.percent) * this.dashArray
+      return (1 - this.percent) * this.dashArray // 播放进度的偏移计算
     }
   }
 }

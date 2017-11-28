@@ -100,13 +100,14 @@
   	</div>
   	</transition>
   	<play-list ref="playlist"></play-list>
+  	<!--播放功能的实现标签，audio会派发play，error， timeupdate，ended等事件-->
   	<audio ref="audio" :src="currentSong.url" @play="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import {mapGetters, mapMutations, mapActions} from 'vuex'
-import animations from 'create-keyframe-animation'
+import animations from 'create-keyframe-animation' // 实现用js钩子实现css3动画的第三方库
 import {prefixStyle} from 'common/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
@@ -122,9 +123,9 @@ export default {
   mixins: [playerMixin],
   data () {
     return {
-      songReady: false,
-      currentTime: 0,
-      radius: 32,
+      songReady: false, // 防疯狂快速点击的标志位，即只有当歌曲ready好的时候才能点击下一首或上一首歌，默认为false
+      currentTime: 0, // 歌曲播放的当前时间
+      radius: 32, // 迷你播放器的播放进度圆的半径，从父组件传给子组件
       currentLyric: null,
       currentLineNum: 0,
       currentShow: 'cd',
@@ -132,83 +133,99 @@ export default {
     }
   },
   computed: {
+    // CD的旋转与暂停的样式控制
     cdCls () {
       return this.playing ? 'play' : 'play pause'
     },
+    // 大播放器的播放，暂停图标的转换
     playIcon () {
       return this.playing ? 'icon-pause' : 'icon-play'
     },
 //  iconMode () {
 //    return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
 //  },
+    // 迷你播放器的播放，暂停图标的切换
     miniIcon () {
       return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
     },
+    // 当按钮不能点击的时候，按钮增加一个disable
     disableCls () {
       return this.songReady ? '' : 'disable'
     },
+    // 歌曲播放比例
     percent () {
       return this.currentTime / this.currentSong.duration
     },
+    // 在组件中通过mapGetters从vuex中获取相关数据的当前状态，然后通过提交mutations来改变数据的状态
     ...mapGetters([
       'fullScreen', // 从vuex取到fullScreen来控制播放器的展开收起状态
       'playlist', // 从vuex取得播放列表
-      'playing', 
-      'currentIndex'
+      'playing', // 播放器的播放状态
+      'currentIndex' // 当前歌曲的索引
     ])
   },
   created () {
     this.touch = {}
   },
   methods: {
+    // 点击收起播放器
     back () {
-      this.setFullScreen(false)
+      this.setFullScreen(false) // 提交一个mutation
     },
+    // 展开播放器
     open () {
-      this.setFullScreen(true)
+      this.setFullScreen(true) // // 提交一个mutation
     },
     enter (el, done) {
-      const {x, y, scale} = this._getPosAndScale()
+      const {x, y, scale} = this._getPosAndScale() // 获取初始位置与出初始缩放比例
+      // 创建一个css3动画
       let animation = {
         0: {
-          transform: `translate3d(${x}px, ${y}px, 0)  scale(${scale})`
+          transform: `translate3d(${x}px, ${y}px, 0)  scale(${scale})` // 动画的初始值
         },
         60: {
-          transform: `translate3d(0, 0, 0)  scale(1.1)`
+          transform: `translate3d(0, 0, 0)  scale(1.1)` // 动画运行到60%时的值，scale放大到1.1倍
         },
         100: {
-          transform: `translate3d(0, 0, 0)  scale(1)`
+          transform: `translate3d(0, 0, 0)  scale(1)` // 运行到100%时的值，scale恢复到原来的大小
         }
       }
+      // 注册实例化动画
       animations.registerAnimation({
         name: 'move',
         animation,
+        // 预设
         presets: {
-          duration: 400,
-          easing: 'linear'
+          duration: 400, // 动画的间隔
+          easing: 'linear' // 缓动
         }
       })
+      // 运行动画
       animations.runAnimation(this.$refs.cdWrapper, 'move', done)
     },
     afterEnter () {
-      animations.unregisterAnimation('move')
-      this.$refs.cdWrapper.style.animation = ''
+      animations.unregisterAnimation('move') // 注销动画
+      this.$refs.cdWrapper.style.animation = '' // cdWrapper 的DOM 的style样式置为空，请空animations
     },
+    // 与enter相对的动画，不用animations，只要用js编写transition
     leave (el, done) {
-      this.$refs.cdWrapper.style.transition = 'all 0.4s'
-      const {x, y, scale} = this._getPosAndScale()
+      this.$refs.cdWrapper.style.transition = 'all 0.4s' // 给cdWrapper对应的DOM添加transition
+      const {x, y, scale} = this._getPosAndScale() // 获取目标位置与目标缩放比例
       this.$refs.cdWrapper.style[transform] = `translate3d(${x}px, ${y}px, 0)  scale(${scale})`
-      this.$refs.cdWrapper.addEventListener('transitionend', done)
+      this.$refs.cdWrapper.addEventListener('transitionend', done) // 动画完成时增加一个监听事件addEventListener，然后执行transitionend事件，这个事件执行完了就执行done回调函数
     },
+    // afterLeave 清空动画样式
     afterLeave () {
       this.$refs.cdWrapper.style.transition = ''
       this.$refs.cdWrapper.style[transform] = ''
     },
+    // 控制播放器的播放状态
     togglePlaying () {
+      // 控制疯狂快速点击状态
       if (!this.songReady) {
         return
       }
-      this.setPlayingState(!this.playing)
+      this.setPlayingState(!this.playing) // 通过mapMutations里的方法提交mutation来改变播放状态
       if (this.currentLyric) {
         this.currentLyric.togglePlay()
       }
@@ -227,7 +244,9 @@ export default {
         this.currentLyric.seek(0)
       }
     },
+    // 下一首歌
     next () {
+      // 控制疯狂快速点击状态
       if (!this.songReady) {
         return
       }
@@ -235,18 +254,22 @@ export default {
         this.loop()
         return
       } else {
-        let index = this.currentIndex + 1
+        let index = this.currentIndex + 1 // 下首歌，索引当前索引+1
+        // 考虑到顺序播放的情况
         if (index === this.playlist.length) {
           index = 0
         }
-        this.setCurrentIndex(index)
+        this.setCurrentIndex(index) // 从mutations映射的方法
+        // 当歌曲暂停时点击下一首歌时，歌曲播放了，但playing的状态没改变
         if (!this.playing) {
-          this.togglePlaying()
+          this.togglePlaying() // 当playing状态处于false暂停状态时，从新调用togglePlaying()来改变playing的状态
         }
       }
-      this.songReady = false
+      this.songReady = false // 这里songReady置为false，当ready（）执行时songReady变为true时才能点击切换到下一首
     },
+    // 上一首歌
     prev () {
+      // 控制疯狂快速点击状态
       if (!this.songReady) {
         return
       }
@@ -254,36 +277,45 @@ export default {
         this.loop()
         return
       } else {
-        let index = this.currentIndex - 1
+        let index = this.currentIndex - 1 // 上一首歌，currentIndex-1
+        // currentIndex=-1时为第一手歌，往前退就是最后一首歌的情况
         if (index === -1) {
-          index = this.playlist.length - 1
+          index = this.playlist.length - 1 // 最后一首歌的索引
         }
-        this.setCurrentIndex(index)
+        this.setCurrentIndex(index) // 从mutations映射的方法
+        // 当歌曲暂停时点击下一首歌时，歌曲播放了，但playing的状态没改变
         if (!this.playing) {
-          this.togglePlaying()
+          this.togglePlaying() // 当playing状态处于false暂停状态时，从新调用togglePlaying()来改变playing的状态
         }
-        this.songReady = false
+        this.songReady = false // 这里songReady置为false，当ready（）执行时songReady变为true时才能点击切换到上一首
       }
     },
+    // audio标签派发的play事件，会在歌曲加载成功播放时触发运行运行，当歌曲ready的时候标志位songReady才为true
     ready () {
       this.songReady = true
       this.savePlayHistory(this.currentSong)
     },
+    // 当因为网络问题或者下一首歌，上一首歌不存在的时候，audio无法加载歌曲的时候，就会触发error函数，以保证在加载歌曲失败的情况下，播放器的功能正常，否则因为加载失败而songReady不能只为true,从而导致所有的点击会失效
     error () {
       this.songReady = true
     },
+    // audio运行时派发的timeupdate事件调用updateTime方法实时更新播放的当前时间，他的参数是个event对象，他的target是audio标签，audio标签有一个叫currentTime的属性，currentTime表示audio当前播放的一个时间戳，他是一个可读写的属性，可以修改他来控制播放的位置
     updateTime (e) {
-      this.currentTime = e.target.currentTime
+      this.currentTime = e.target.currentTime // audio 标签的currentTime属性赋值个data里的currentTime
     },
+    // 格式化时间戳方法
     format (interval) {
-      interval = interval | 0  // 向下取整
-      const minute = interval / 60 | 0
-      const second = this._pad(interval % 60)
+      interval = interval | 0  // 向下取整，相当于Math.floor()
+      // 获取时间戳的分
+      const minute = interval / 60 | 0 
+      const second = this._pad(interval % 60) // 获取时间戳的秒
       return `${minute}:${second}`
     },
+    // 监听事件回调函数，从子组件progress-bar.vue派发出来的事件
     onProgressChange (percent) {
-      const currentTime = this.currentSong.duration * percent
-      this.$refs.audio.currentTime = currentTime
+      const currentTime = this.currentSong.duration * percent // 根据从子组件progress-bar.vue派发出的percent计算出播放的当前时间
+      this.$refs.audio.currentTime = currentTime // 重新计算 audio里的currentTime属性
+      // 解决当在暂停状态下拖动后不播放的问题
       if (!this.playing) {
         this.togglePlaying()
       }
@@ -390,26 +422,27 @@ export default {
       this.$refs.middleL.style.opacity = opacity
       this.$refs.middleL.style[transitionDuration] = `${time}ms`
     },
-    // 补零
+    // 补零方法，功能是补到几位用n = 2 来控制
     _pad (num, n = 2) {
-      let len = num.toString().length
+      let len = num.toString().length // 获取传入的字符串的长度
       while (len < n) {
         num = '0' + num
         len++
       }
       return num
     },
+    // 获取唱片弹出动画的初始位置与初始缩放的尺寸
     _getPosAndScale () {
-      const targetWidth = 40
-      const paddingLeft = 40
-      const paddingBottom = 30
-      const paddingTop = 80
-      const width = window.innerWidth * 0.8  // CD图片的宽度是屏幕宽度的80%
+      const targetWidth = 40 // 迷你播放器的宽度
+      const paddingLeft = 40 // 迷你播发器中心点与左边界的宽度
+      const paddingBottom = 30 // 迷你播发器中心点与底部的宽度
+      const paddingTop = 80 // 大唱片的顶部到屏幕顶部的宽度
+      const width = window.innerWidth * 0.8  // 大CD图片的宽度是屏幕宽度的80%
       // 初始缩放比例
       const scale = targetWidth / width
-      // 初始位置的X值
+      // 初始位置的X坐标值
       const x = -(window.innerWidth / 2 - paddingLeft)
-      // 初始位置的Y值
+      // 初始位置的Y坐标值
       const y = window.innerHeight - paddingTop - width / 2 - paddingBottom
       return {
         x,
@@ -417,6 +450,7 @@ export default {
         scale
       }
     },
+    // 在组件中映射的mutations方法来提交mutation
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN'
 //    setPlayingState: 'SET_PLAYING_STATE',
@@ -444,14 +478,15 @@ export default {
       }
       setTimeout(this.timer)
       this.timer = setTimeout(() => {
-        this.$refs.audio.play()
+        this.$refs.audio.play() // 当currentSong发生变化是调用audio的play方法
         this.getLyric()
       }, 1000)
     },
+    // 监听playing的状态从而达到控制audio的播放状态
     playing (newPlaying) {
       const audio = this.$refs.audio
       this.$nextTick(() => {
-        newPlaying ? audio.play() : audio.pause()
+        newPlaying ? audio.play() : audio.pause() // 调用audio的play（播放）与pause（暂停）的方法
       })
     }
   },
