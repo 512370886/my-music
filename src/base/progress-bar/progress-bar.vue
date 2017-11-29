@@ -51,7 +51,13 @@ export default {
     },
     // 点击后
     progressClick (e) {
-      this._offset(e.offsetX) // e.offsetX获取点击后的偏移量来设置小球按钮以及进度条的偏移
+      // 该方法获得页面中某个元素的左，上，右和下分别相对浏览器视窗的位置。
+      const rect = this.$refs.progressBar.getBoundingClientRect() // 获取element实际的top、bottom、left、right定位值，我们利用它计算element的高度，如果为0，即可认为element不可见
+      console.log(rect)
+      const offsetWidth = e.pageX - rect.left // e.pageX点击的位置到屏幕最左边的距离
+      this._offset(offsetWidth)
+      // 这里当我们点击 progressBtn 的时候，e.offsetX 获取不对
+      // this._offset(e.offsetX) e.offsetX获取点击后的偏移量来设置小球按钮以及进度条的偏移
       this._triggerPercent() // 派发一个事件，去通知父组件改变了多少percent
     },
     // 点击或者拖动后重新计算播放比例

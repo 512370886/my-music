@@ -37,7 +37,7 @@ const RESERVED_HEIGHT = 40
 const transform = prefixStyle('transform')
 const backdrop = prefixStyle('backdrop-filter')
 export default {
-  mixins: [playlistMixin],
+  mixins: [playlistMixin], // 一个组件可以插入多个mixin, 所以mixins是一个数组
   props: {
     // 接收从singer-detail传入的歌手背景图片数据
     bgImage: {
@@ -80,6 +80,7 @@ export default {
     this.$refs.list.$el.style.top = `${this.$refs.bgImage.clientHeight}px` // 设置scroll组件的高度，他的值等于背景图片的高度
   },
   methods: {
+    // 重新计算列表滚动到底部的位置
     handlePlaylist (playlist) {
       const bottom = playlist.length > 0 ? '60px' : ''
       this.$refs.list.$el.style.bottom = bottom
@@ -100,9 +101,10 @@ export default {
         index
       })
     },
+    // 点击随机播放时，随机播放歌曲列表
     random () {
       this.randomPlay({
-        list: this.songs
+        list: this.songs // 从singer-detail父组件传入的歌曲数据
       })
     },
     ...mapActions([

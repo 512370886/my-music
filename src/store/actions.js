@@ -8,6 +8,7 @@ function findIndex (list, song) {
     return item.id === song.id
   })
 }
+// 点击歌曲播放的action
 export const selectPlay = function ({commit, state}, {list, index}) {
   commit(types.SET_SEQUENCE_LIST, list)
   if (state.mode === playMode.random) {
@@ -21,11 +22,11 @@ export const selectPlay = function ({commit, state}, {list, index}) {
   commit(types.SET_FULL_SCREEN, true)
   commit(types.SET_PLAYING_STATE, true)
 }
-
+// 随机播放的action,随机播放是没有索引的
 export const randomPlay = function ({commit}, {list}) {
   commit(types.SET_PLAY_MODE, playMode.random)
   commit(types.SET_SEQUENCE_LIST, list)
-  let randomList = shuffle(list)
+  let randomList = shuffle(list) // 列表的洗牌，打乱列表原有的顺序
   commit(types.SET_PLAYLIST, randomList)
   commit(types.SET_CURRENT_INDEX, 0)
   commit(types.SET_FULL_SCREEN, true)

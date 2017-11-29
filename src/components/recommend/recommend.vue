@@ -48,22 +48,24 @@ export default {
   mixins: [playlistMixin],
   data () {
     return {
-      recommends: [],
-      discList: []
+      recommends: [], // 推荐slide轮播图片数据
+      discList: [] // 热门歌单推荐列表数据
     }
   },
   created () {
     this._getRecommend() // 获取推荐页面轮播图数据
     setTimeout(() => {
-      this._getDiscList()
+      this._getDiscList() // 获取热门歌单推荐列表数据
     }, 1000)
   },
   methods: {
+    // 重新计算列表滚动到底部的位置
     handlePlaylist (playlist) {
       const bottom = playlist.length > 0 ? '60px' : ''
       this.$refs.recommend.style.bottom = bottom
       this.$refs.scroll.refresh()
     },
+    // 进入热门歌单推荐列表详情页
     selectItem (item) {
       this.$router.push({
         path: `/recommend/${item.dissid}`
@@ -79,6 +81,7 @@ export default {
         }
       })
     },
+    // 获取热门歌单推荐列表数据的方法
     _getDiscList () {
       getDiscList().then((res) => {
         if (res.code === ERR_OK) {

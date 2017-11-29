@@ -18,17 +18,18 @@ export default {
   mixns: [playlistMixin],
   data () {
     return {
-      singers: []
+      singers: [] // 歌手列表数据
     }
   },
   created () {
-    this._getSingerList()
+    this._getSingerList() // 获取歌手列表数据
   },
   methods: {
+     // 重新计算列表滚动到底部的位置
     handlePlaylist (playlist) {
       const bottom = playlist.length > 0 ? '60px' : ''
       this.$refs.singer.style.bottom = bottom
-      this.$refs.list.refresh()
+      this.$refs.list.refresh() // 通过listview组件调用scroll组件的refresh()方法
     },
     // 监听从子组件派发的点击事件，实现路由跳转到子路由
     selectSinger (Singer) {
@@ -37,6 +38,7 @@ export default {
       })
       this.setSinger(Singer) // 歌手数据传入vuex
     },
+    // 获取歌手列表数据方法
     _getSingerList () {
       getSingerList().then((res) => {
         if (res.code === ERR_OK) {

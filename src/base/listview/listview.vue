@@ -103,6 +103,7 @@ export default {
       let anchorIndex = parseInt(this.touch.anchorIndex) + delta // 手指移动了多少个锚点
       this._scrollTo(anchorIndex) // move的时候滚动到第几个个元素
     },
+    // 向外暴露的scroll的refresh（）方法，以便singer组件可以调用
     refresh () {
       this.$refs.listview.refresh()
     },

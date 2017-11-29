@@ -1,6 +1,6 @@
 import {getLyric} from 'api/song'
 import {ERR_OK} from 'api/config'
-import {Base64} from 'js-base64'
+import {Base64} from 'js-base64' // 第三方库解码工具
 
 export default class Song {
   // 构造一个song类，当传入的数据比较多是，可以传入一个对象
