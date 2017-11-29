@@ -307,7 +307,7 @@ export default {
     format (interval) {
       interval = interval | 0  // 向下取整，相当于Math.floor()
       // 获取时间戳的分
-      const minute = interval / 60 | 0 
+      const minute = interval / 60 | 0
       const second = this._pad(interval % 60) // 获取时间戳的秒
       return `${minute}:${second}`
     },

@@ -42,7 +42,7 @@ export default {
       const deltaX = e.touches[0].pageX - this.touch.startX  // 当前位置减去起始位置得到移动的偏移量
       // this.touch.left + deltaX 为开始的位置+手指移动的偏移量， offsetWidth偏移量这个值首先要大于0，然后总的偏移值要小于进度条的总宽度
       const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - progressBtnWidth, Math.max(0, this.touch.left + deltaX))
-      this._offset(offsetWidth) //设置小球按钮以及进度条的偏移
+      this._offset(offsetWidth) // 置小球按钮以及进度条的偏移
     },
     // 拖动结束后
     progressTouchEnd () {
@@ -58,7 +58,7 @@ export default {
     _triggerPercent () {
       const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth // 计算进度条的总宽度
       // 点击或者拖动后运动的播放比例
-      const percent = this.$refs.progress.clientWidth / barWidth 
+      const percent = this.$refs.progress.clientWidth / barWidth
       this.$emit('percentChange', percent) // 向外派发一个事件，已经告诉父组件子组件当前运动了多少比例
     },
     // 设置小球按钮以及进度条的偏移
@@ -69,7 +69,7 @@ export default {
   },
   watch: {
     percent (newPercent) {
-    	// 判断条件为解决拖动进度条与播放进度的冲突
+      // 判断条件为解决拖动进度条与播放进度的冲突
       if (newPercent >= 0 && !this.touch.initiated) {
         const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth // 计算进度条的总宽度
         const offSetWidth = newPercent * barWidth // 进度条偏移的宽度

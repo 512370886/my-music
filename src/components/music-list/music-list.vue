@@ -39,7 +39,7 @@ const backdrop = prefixStyle('backdrop-filter')
 export default {
   mixins: [playlistMixin],
   props: {
-  	// 接收从singer-detail传入的歌手背景图片数据
+    // 接收从singer-detail传入的歌手背景图片数据
     bgImage: {
       type: String,
       default: ''
@@ -96,7 +96,7 @@ export default {
     selectItem (item, index) {
       // 一系列mutations封装成的actions的调用
       this.selectPlay({
-        list: this.songs, //从singer-detail父组件传入的歌曲数据
+        list: this.songs, // 从singer-detail父组件传入的歌曲数据
         index
       })
     },
@@ -120,8 +120,8 @@ export default {
       this.$refs.layer.style[transform] = `translate3d(0, ${translateY}px, 0)` // 设置bg-layer/layer的transform
       const percent = Math.abs(newY / this.imageHeight) // 滚动的距离与歌手背景图片高度的比再取绝对值，即为歌手背景图片放大的倍数，这样设置可以跟滚动无缝贴合
       if (newY > 0) {
-        scale = 1 + percent // 歌手背景图片的放大倍数 
-        zIndex = 10 // 
+        scale = 1 + percent // 歌手背景图片的放大倍数
+        zIndex = 10
       } else {
         blur = Math.min(20 * percent, 20) // 设置歌手背景图片在滚动列表上滚时的高斯模糊值
       }
@@ -133,7 +133,7 @@ export default {
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
         this.$refs.playBtn.style.display = 'none' // 当歌曲列表滚动到顶部时，随机播放的按钮消失
       } else {
-      	// 当列表不在顶部时，恢复原来的样式
+        // 当列表不在顶部时，恢复原来的样式
         this.$refs.bgImage.style.paddingTop = '70%'
         this.$refs.bgImage.style.height = 0
         this.$refs.playBtn.style.display = '' // 恢复随机播放按钮的显示

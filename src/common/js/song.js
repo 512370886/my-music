@@ -51,7 +51,7 @@ export function filterSinger (singer) {
   if (!singer) {
     return ''
   }
-  // 数组遍历 
+  // 数组遍历
   singer.forEach((s) => {
     ret.push(s.name)
   })
