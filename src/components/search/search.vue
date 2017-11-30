@@ -1,8 +1,10 @@
 <template>
   <div class="search">
+  	
   	<div class="search-box-wrapper">
   	  <search-box ref="searchBox" @query="onQueryChange"></search-box>
   	</div>
+  	
   	<div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
   		
   	  <scroll :refreshDelay="refreshDelay" class="shortcut" ref="shortcut" :data="shorcut">
@@ -24,7 +26,9 @@
   	    			<i class="icon-clear"></i>
   	    		</span>
   	    	</h1>
+  	    	
   	    	<search-list @select="addQuery" @delete="deleteSearchHistory" :searches="searchHistory"></search-list>
+  	    	
   	    </div>
   	    
   	  </div>
@@ -32,9 +36,11 @@
   	  </scroll>
   	  
   	</div>
+  	
   	<div ref="searchResult" class="search-result" v-show="query">
   		<suggest ref="suggest" @select="saveSearch" @listScroll="blurInput" :query="query"></suggest>
   	</div>
+  	
   	<confirm ref="confirm" text="是否情况所有搜索历史！" confirmBtnText="清空" @confirm="clearSearchHistory"></confirm>
   	<router-view></router-view>
   </div>
@@ -54,7 +60,7 @@ export default {
   mixins: [playlistMixin, searchMixin],
   data () {
     return {
-      hotKey: []
+      hotKey: [] // 热门搜索关键词数据
 //    query: ''
     }
   },
@@ -108,7 +114,7 @@ export default {
     _getHotKey () {
       getHotKey().then((res) => {
         if (res.code === ERR_OK) {
-          this.hotKey = res.data.hotkey.slice(0, 10)
+          this.hotKey = res.data.hotkey.slice(0, 12)
           console.log(this.hotKey)
         }
       })

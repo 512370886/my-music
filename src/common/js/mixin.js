@@ -101,7 +101,7 @@ export const playerMixin = {
 export const searchMixin = {
   data () {
     return {
-      query: '',
+      query: '', // 搜索框里的检索词
       refreshDelay: 100
     }
   },
@@ -111,14 +111,17 @@ export const searchMixin = {
     ])
   },
   methods: {
+    // 点击热门搜索关键词，调用search-box组件里的setQuery()方法，把参数传入
     addQuery (query) {
       this.$refs.searchBox.setQuery(query)
     },
+    // 监听子组件派发出来的query事件方法来实时获取搜索框中内容的变化
     onQueryChange (query) {
-      this.query = query
+      this.query = query // 接收到从search-box子组件中传入的newQuery
     },
+    // 监听到从suggest组件派发出来的listScroll事件，然后执行的回调函数
     blurInput () {
-      this.$refs.searchBox.blur()
+      this.$refs.searchBox.blur() // 调用子组件search-box的方法
     },
     saveSearch () {
       this.saveSearchHistory(this.query)

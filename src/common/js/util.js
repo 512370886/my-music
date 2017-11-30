@@ -15,7 +15,7 @@ export function shuffle (arr) {
 }
 // 节流函数
 export function debounce (func, delay) {
-  let timer
+  let timer // 定义一个计时器
   return function (...args) {
     if (timer) {
       clearTimeout(timer)

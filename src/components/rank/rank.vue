@@ -33,12 +33,12 @@ export default {
   mixins: [playlistMixin],
   created () {
     setTimeout(() => {
-      this._getTopList()
+      this._getTopList() // 抓取歌曲排行榜列表数据
     }, 1000)
   },
   data () {
     return {
-      topList: []
+      topList: [] // 歌曲排行榜列表数据
     }
   },
   methods: {
@@ -47,12 +47,14 @@ export default {
       this.$refs.rank.style.bottom = bottom
       this.$refs.toplist.refresh()
     },
+    // 点击排行榜列表进入排行榜详情页
     selectItem (item) {
       this.$router.push({
         path: `/rank/${item.id}`
       })
-      this.setTopList(item)
+      this.setTopList(item) // 各个排行榜详情页数据通过mutation写入vuex
     },
+    // 抓取歌曲排行榜列表数据
     _getTopList () {
       getTopList().then((res) => {
         if (res.code === ERR_OK) {

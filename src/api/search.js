@@ -1,6 +1,6 @@
 import jsonp from '../common/js/jsonp.js'
 import {commonParams, options} from './config.js'
-
+// 热门关键词数据的获取
 export function getHotKey () {
   const url = 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg'
   const data = Object.assign({}, commonParams, {
@@ -10,7 +10,7 @@ export function getHotKey () {
   })
   return jsonp(url, data, options)
 }
-
+// 搜索框变化是请求的相关数据
 export function search (query, page, zhida, perpage) {
   const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
   const data = Object.assign({}, commonParams, {

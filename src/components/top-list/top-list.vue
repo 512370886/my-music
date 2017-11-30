@@ -12,9 +12,11 @@ import {ERR_OK} from 'api/config'
 import {createSong} from 'common/js/song'
 export default {
   computed: {
+    // 排行榜详情页歌曲标题
     title () {
       return this.topList.topTitle
     },
+    // 排行榜详情页歌曲背景图片
     bgimage () {
       if (this.songs.length) {
         return this.songs[0].image
@@ -22,16 +24,16 @@ export default {
       return ''
     },
     ...mapGetters([
-      'topList'
+      'topList' // 获取在rank组件中写入的各个排行榜详情页数据
     ])
   },
   created () {
-    this._getMusicList()
+    this._getMusicList() // 获取排行榜详情页歌曲列表数据
   },
   data () {
     return {
-      songs: [],
-      rank: true
+      songs: [], // 排行榜详情页歌曲列表数据
+      rank: true // 控制排行榜详情页歌曲样式显示的标志位，传给music-list组件
     }
   },
   methods: {
@@ -40,6 +42,7 @@ export default {
         this.$router.push('/rank')
         return
       }
+      // 获取排行榜详情页歌曲列表数据
       getMusicList(this.topList.id).then((res) => {
         if (res.code === ERR_OK) {
           this.songs = this._normalizeSongs(res.songlist)
@@ -47,6 +50,7 @@ export default {
         }
       })
     },
+    // 返回数据的处理
     _normalizeSongs (list) {
       let ret = []
       list.forEach((item) => {

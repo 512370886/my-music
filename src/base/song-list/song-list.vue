@@ -22,28 +22,33 @@ export default {
       type: Array,
       default: []
     },
+    // 接收从music-list父组件传过来的数据
     rank: {
       type: Boolean,
       default: false
     }
   },
   methods: {
+    // 点击相应的歌曲
     selectItem (item, index) {
       this.$emit('select', item, index) // 派发一个select事件，告诉父组件我被点击了以及被点击的元素是什么他的索引是什么，以便父组件可以监听得到
     },
+    // 歌曲描述
     getDesc (song) {
       return `${song.singer} · ${song.album}`
     },
+    // 排行榜详情页前三名歌曲添加图片样式
     getRankCls (index) {
       if (index <= 2) {
-        return `icon icon${index}`
+        return `icon icon${index}` // 图片样式
       } else {
         return 'text'
       }
     },
+    // 排行榜详情页第四名以后的列表的排名text显示
     getRankText (index) {
       if (index > 2) {
-        return index + 1
+        return index + 1 // 因排行是从1开始排的，索引index要+1
       }
     }
   }

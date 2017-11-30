@@ -43,7 +43,7 @@ export default {
       // 获取歌手列表详情数据
       getSingerDetail(this.singer.mid).then((res) => {
         if (res.code === ERR_OK) {
-          this.songs = this._normalLizeSongs(res.data.list) // 歌手详情页的歌曲列表负值
+          this.songs = this._normalLizeSongs(res.data.list) // 歌手详情页的歌曲列表赋值
           console.log(this.songs)
         }
       })

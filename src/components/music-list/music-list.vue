@@ -39,21 +39,22 @@ const backdrop = prefixStyle('backdrop-filter')
 export default {
   mixins: [playlistMixin], // 一个组件可以插入多个mixin, 所以mixins是一个数组
   props: {
-    // 接收从singer-detail传入的歌手背景图片数据
+    // 接收从singer-detail或其他父组件传入的歌手背景图片数据
     bgImage: {
       type: String,
       default: ''
     },
-    // 接收从singer-detail传入的歌曲数据
+    // 接收从singer-detail或其他父组件传入的歌曲数据
     songs: {
       type: Array,
       default: []
     },
-    // 接收从singer-detail传入的歌手标题数据
+    // 接收从singer-detail或者其他父组件传入的歌手标题数据
     title: {
       type: String,
       default: ''
     },
+    // 接收从top-list组件穿过来的数据
     rank: {
       type: Boolean,
       default: false
@@ -97,7 +98,7 @@ export default {
     selectItem (item, index) {
       // 一系列mutations封装成的actions的调用
       this.selectPlay({
-        list: this.songs, // 从singer-detail父组件传入的歌曲数据
+        list: this.songs, // 从singer-detail或其他父组件传入的歌曲数据
         index
       })
     },

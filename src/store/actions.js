@@ -32,37 +32,39 @@ export const randomPlay = function ({commit}, {list}) {
   commit(types.SET_FULL_SCREEN, true)
   commit(types.SET_PLAYING_STATE, true)
 }
-
+// 往当前的playlist里插入一首歌曲
 export const insertSong = function ({commit, state}, song) {
-  let playlist = state.playlist.slice() // 返回一个playlist的副本
-  let sequenceList = state.sequenceList.slice() // 返回一个sequenceList的副本
-  let currentIndex = state.currentIndex
+  let playlist = state.playlist.slice() // 返回一个playlist的副本，以免在下面增加删除歌曲时直接修改了playlist里的数据，这在vuex里是不允许的
+  let sequenceList = state.sequenceList.slice() // 返回一个sequenceList的副本，以免在下面增加删除歌曲时直接修改了sequenceList里的数据，这在vuex里是不允许的
+  let currentIndex = state.currentIndex // 先找到当前的歌曲的索引
   // 记录当前歌曲
   let currentSong = playlist[currentIndex]
   // 查找当前列表中是否有带插入的歌曲并返回其索引
   let fpIndex = findIndex(playlist, song)
-  // 因为是插入歌曲，所以索引要+1
+  // 因为是插入歌曲，所以索引要+1， 因为我们要插入的位置是当前索引的下一个
   currentIndex++
   // 插入这首歌到当前索引位置
-  playlist.splice(currentIndex, 0, song)
+  playlist.splice(currentIndex, 0, song) // 插入增加一首歌曲
   // 如果已经包含了这首歌
   if (fpIndex > -1) {
-    // 如果当前插入的序号大于列表中的序号
+    // 如果当前插入歌曲的序号大于这首歌曲在列表中的序号
     if (currentIndex > fpIndex) {
-      playlist.splice(fpIndex, 1)
+      playlist.splice(fpIndex, 1) // 删除一首歌曲
       currentIndex--
     } else {
-      playlist.splice(fpIndex + 1, 1)
+      playlist.splice(fpIndex + 1, 1) // 删除一首歌曲
     }
   }
-  let currentSIndex = findIndex(sequenceList, currentSong) + 1
-  let fsIndex = findIndex(sequenceList, song)
-  sequenceList.splice(currentSIndex, 0, song)
+  let currentSIndex = findIndex(sequenceList, currentSong) + 1 // 获取当前这首歌在sequenceList里要插入的位置，当前的歌曲currentSong在sequenceList里的位置+1
+  let fsIndex = findIndex(sequenceList, song) // 查找sequenceList是否有要插入的歌曲
+  sequenceList.splice(currentSIndex, 0, song) // 插入增加一首歌曲
+  // 在插入一首歌曲后再判断sequenceList里是否有这首歌
   if (fsIndex > 1) {
+    // 如果有这首歌曲再判断是在这首歌的前面插入，还是在后面插入
     if (currentSIndex > fsIndex) {
-      sequenceList.splice(fsIndex, 1)
+      sequenceList.splice(fsIndex, 1) // 删除一首歌曲
     } else {
-      sequenceList.splice(fsIndex + 1, 1)
+      sequenceList.splice(fsIndex + 1, 1) // 删除一首歌曲
     }
   }
   commit(types.SET_PLAYLIST, playlist)

@@ -65,12 +65,12 @@ export default {
       this.$refs.recommend.style.bottom = bottom
       this.$refs.scroll.refresh()
     },
-    // 进入热门歌单推荐列表详情页
+    // 点击各个热门歌单进入热门歌单推荐列表详情页
     selectItem (item) {
       this.$router.push({
         path: `/recommend/${item.dissid}`
       })
-      this.setDisc(item)
+      this.setDisc(item) // 当点击各个歌单时，通过mutation把相应的歌单详情的相关数据写入vuex
     },
     // 获取推荐页面轮播图数据的方法
     _getRecommend () {
