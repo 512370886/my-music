@@ -73,37 +73,38 @@ export const insertSong = function ({commit, state}, song) {
   commit(types.SET_FULL_SCREEN, true)
   commit(types.SET_PLAYING_STATE, true)
 }
-
+// 保存搜索历史数据
 export const saveSearchHistory = function ({commit}, query) {
   commit(types.SET_SEARCH_HISTORY, saveSearch(query))
 }
-
+// 删除搜索历史数据
 export const deleteSearchHistory = function ({commit}, query) {
   commit(types.SET_SEARCH_HISTORY, deleteSearch(query))
 }
-
+// 清空历史搜索数据
 export const clearSearchHistory = function ({commit}) {
   commit(types.SET_SEARCH_HISTORY, clearSearch())
 }
-
+// 删除播放列表里的一首歌曲
 export const deleteSong = function ({commit, state}, song) {
   let playlist = state.playlist.slice() // 返回一个playlist的副本
   let sequenceList = state.sequenceList.slice() // 返回一个sequenceList的副本
-  let currentIndex = state.currentIndex
-  let pIndex = findIndex(playlist, song)
-  playlist.splice(pIndex, 1)
-  let sIndex = findIndex(sequenceList, song)
-  sequenceList.splice(sIndex, 1)
+  let currentIndex = state.currentIndex // 先找到当前的歌曲的索引
+  let pIndex = findIndex(playlist, song) // 找到这首歌在playlist下的索引
+  playlist.splice(pIndex, 1) // 在playlist中删除这首歌
+  let sIndex = findIndex(sequenceList, song) // 找到这首歌在sequenceList下的索引
+  sequenceList.splice(sIndex, 1) // 在sequenceList中删除这首歌
+  // 如果删除的这首歌在当前播放的歌前面或者删除的是最后一首歌时
   if (currentIndex > pIndex || currentIndex === playlist.length) {
-    currentIndex--
+    currentIndex-- // 当前歌曲的索引要-1
   }
   commit(types.SET_PLAYLIST, playlist)
   commit(types.SET_SEQUENCE_LIST, sequenceList)
   commit(types.SET_CURRENT_INDEX, currentIndex)
-  const playingState = playlist.length > 0
+  const playingState = playlist.length > 0 // 判断播放列表中是否还有没有歌曲，来决定播放状态
   commit(types.SET_PLAYING_STATE, playingState)
 }
-
+// 请空播放列表里的所有歌曲
 export const deleteSongList = function ({commit}) {
   commit(types.SET_PLAYLIST, [])
   commit(types.SET_SEQUENCE_LIST, [])

@@ -17,6 +17,7 @@
 <script type="text/ecmascript-6">
 export default {
   props: {
+    // 标题
     text: {
       type: String,
       default: ''
@@ -32,6 +33,7 @@ export default {
   },
   data () {
     return {
+      // 控制弹窗的显示和隐藏
       showFlag: false
     }
   },
@@ -42,10 +44,12 @@ export default {
     hide () {
       this.showFlag = false
     },
+    // 取消
     cancle () {
       this.hide()
       this.$emit('cancle')
     },
+    // 确认
     confirm () {
       this.hide()
       this.$emit('confirm')

@@ -20,11 +20,13 @@ export default {
     }
   },
   methods: {
+    // 选择
     selectItem (item) {
-      this.$emit('select', item)
+      this.$emit('select', item) // 派发一个点击事件
     },
+    // 删除
     deleteOne (item) {
-      this.$emit('delete', item)
+      this.$emit('delete', item) // 派发一个点击事件
     }
   }
 }

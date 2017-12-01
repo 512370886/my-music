@@ -6,7 +6,7 @@
   	</div>
   	
   	<div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
-  		
+  		<!--scroll组件生效的只是它里面的第一个元素-->
   	  <scroll :refreshDelay="refreshDelay" class="shortcut" ref="shortcut" :data="shorcut">
   	  	
   	  <div>
@@ -41,7 +41,7 @@
   		<suggest ref="suggest" @select="saveSearch" @listScroll="blurInput" :query="query"></suggest>
   	</div>
   	
-  	<confirm ref="confirm" text="是否情况所有搜索历史！" confirmBtnText="清空" @confirm="clearSearchHistory"></confirm>
+  	<confirm ref="confirm" text="是否清空所有搜索历史！" confirmBtnText="清空" @confirm="clearSearchHistory"></confirm>
   	<router-view></router-view>
   </div>
 </template>
@@ -65,6 +65,7 @@ export default {
     }
   },
   computed: {
+    // 当scroll组件中包含有两个以上的数据要传的时候，要把这几个数据拼接起来再穿过去
     shorcut () {
       return this.hotKey.concat(this.searchHistory)
     }
@@ -102,14 +103,15 @@ export default {
 //  saveSearch () {
 //    this.saveSearchHistory(this.query)
 //  },
+    // 在父组件search里调用confirm组件里的方法，控制confirm组件的显示
     showConfirm () {
       this.$refs.confirm.show()
     },
 //  deleteOne (item) {
-//    this.deleteSearchHistory(item)
+//    this.deleteSearchHistory(item) // 这方法可以直接用在DOM上了
 //  },
 //  deleteAll () {
-//    this.clearSearchHistory()
+//    this.clearSearchHistory() // 这方法可以直接用在DOM上了
 //  },
     _getHotKey () {
       getHotKey().then((res) => {
@@ -124,6 +126,7 @@ export default {
     ])
   },
   watch: {
+    // 当搜索框内容从有到无时，页面切换时，调用scroll组件的refresh（）方法重新计算一下高度
     query (newQuery) {
       if (!newQuery) {
         setTimeout(() => {

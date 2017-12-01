@@ -382,6 +382,7 @@ export default {
       this.touch.startX = touch.pageX // 记录手指开始点击的位置的X轴的值，touches[0]表示第一个手指触碰
       this.touch.startY = touch.pageY // 记录手指开始点击的位置的Y轴的值，touches[0]表示第一个手指触碰
     },
+    // 播放列表的显示，调用playlist组件里的show方法
     showPlaylist () {
       this.$refs.playlist.show()
     },
@@ -477,6 +478,7 @@ export default {
   },
   watch: {
     currentSong (newSong, oldSong) {
+      // 当播放列表中只有一首歌被删除时，这个时候newSong.id是不存在的
       if (!newSong.id) {
         return
       }

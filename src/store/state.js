@@ -11,9 +11,9 @@ const state = {
   currentIndex: -1, // 当前播放的索引，为毛是默认是-1？？currentSong可以根据playlist和currentIndex计算而来
   disc: {}, // 推荐页面的热门推荐歌单详情数据
   topList: {}, // 排行榜歌曲详情数据
-  searchHistory: loadSearch(),
-  playHistory: loadPlay(),
-  favoriteList: loadFavorite()
+  searchHistory: loadSearch(), // 搜索历史数据
+  playHistory: loadPlay(), // 播放历史数据
+  favoriteList: loadFavorite() // 我的收藏数据
 }
 
 export default state

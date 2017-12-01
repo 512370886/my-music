@@ -118,8 +118,9 @@ export default {
       } else {
         this.insertSong(item) // 给state里当前的playlist添加一首歌曲，而不是改变整个playlist里的数据
       }
-      this.$emit('select')
+      this.$emit('select') // 向外派发一个事件
     },
+    // 代理scroll组件中的refresh()方法，在其父组件中就可以调用scroll的refresh()方法了
     refresh () {
       this.$refs.suggest.refresh()
     },

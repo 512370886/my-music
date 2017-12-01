@@ -53,9 +53,9 @@ export default {
   mixins: [searchMixin],
   data () {
     return {
-      showFlag: false,
+      showFlag: false, // 组件显示，隐藏的控制
 //    query: '',
-      showSinger: false,
+      showSinger: false, // // 需不需要在搜索列表中展示歌手的标志位，true是需要展示，false是不需要展示，这里不需要在搜索列表中显现歌手
       currentIndex: 0,
       switches: [
         {name: '最近播放'},
@@ -69,6 +69,7 @@ export default {
     ])
   },
   methods: {
+    // 显示
     show () {
       this.showFlag = true
       setTimeout(() => {
@@ -79,14 +80,16 @@ export default {
         }
       }, 30)
     },
+    // 隐藏
     hide () {
       this.showFlag = false
     },
 //  onQueryChange (query) {
 //    this.query = query
 //  },
+    // 监听到从suggest组件派发出来的select事件的回调函数
     selectSuggest () {
-      this.saveSearch()
+      this.saveSearch() // 此函数是在search组件中监听从suggest组件派发出来的select事件的回调函数，此函数里面是一个保存搜索数据saveSearchHistory的Actions
       this.showTip()
     },
     switchItem (index) {

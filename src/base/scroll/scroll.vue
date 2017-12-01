@@ -92,6 +92,7 @@ export default {
     scrollTo () {
       this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
     },
+    // better-scroll封装的方法， 滚动到相应元素DOM
     scrollToElement () {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
     }

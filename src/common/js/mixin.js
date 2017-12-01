@@ -123,8 +123,9 @@ export const searchMixin = {
     blurInput () {
       this.$refs.searchBox.blur() // 调用子组件search-box的方法
     },
+    // 监听到从子组件suggest派发出来的事件的回调函数
     saveSearch () {
-      this.saveSearchHistory(this.query)
+      this.saveSearchHistory(this.query) // 把搜索结果通过Actions写入vuex，并存储在localStorage中
     },
     ...mapActions([
       'saveSearchHistory',
