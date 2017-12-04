@@ -3,11 +3,11 @@ import storage from 'good-storage'
 const SEARCH_KEY = '__search__' // 搜索历史在localStorage里的key值
 const SEARCH_MAX_LENGTH = 15 // 最大存储长度
 
-const PLAY_KEY = '__play__'
-const PLAY_MAX_LENGTH = 200
+const PLAY_KEY = '__play__' // 最近播放历史的key值
+const PLAY_MAX_LENGTH = 200 // 最大存储长度
 
-const FAVORITE_KEY = '__favorite__'
-const FAVORITE_MAX_LENGTH = 200
+const FAVORITE_KEY = '__favorite__' // 收藏列表的key值
+const FAVORITE_MAX_LENGTH = 200 // 最大存储长度
 // 往数组里插入数据，如有重复的则删除旧的，并且新插入的数据总是在最前面
 function insertArray (arr, val, compare, maxLen) {
   const index = arr.findIndex(compare) // 查找数组中是否有某个元素，并返回其索引，findIndex（）为ES6的API，支持传入一个比较函数
@@ -61,7 +61,7 @@ export function clearSearch () {
   storage.remove(SEARCH_KEY)
   return []
 }
-
+// 保存最近播放历史数据到本地缓存，并用insertArray方法把最新播放的排在第一位
 export function savePlay (song) {
   let songs = storage.get(PLAY_KEY, [])
   insertArray(songs, song, (item) => {
@@ -70,11 +70,11 @@ export function savePlay (song) {
   storage.set(PLAY_KEY, songs)
   return songs
 }
-
+// 获取本地缓存数据
 export function loadPlay () {
   return storage.get(PLAY_KEY, [])
 }
-
+// 插入一首收藏歌曲到收藏列表
 export function saveFavorite (song) {
   let songs = storage.get(FAVORITE_KEY, [])
   insertArray(songs, song, (item) => {
@@ -83,7 +83,7 @@ export function saveFavorite (song) {
   storage.set(FAVORITE_KEY, songs)
   return songs
 }
-
+// 从收藏列表删除一首歌曲
 export function deleteFavorite (song) {
   let songs = storage.get(FAVORITE_KEY, [])
   deleteFromArray(songs, (item) => {
@@ -92,7 +92,7 @@ export function deleteFavorite (song) {
   storage.set(FAVORITE_KEY, songs)
   return songs
 }
-
+// 获取收藏歌曲的本地缓存数据
 export function loadFavorite () {
   return storage.get(FAVORITE_KEY, [])
 }

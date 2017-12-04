@@ -11,7 +11,7 @@ import Router from 'vue-router'
 // import UserCenter from 'components/user-center/user-center'
 
 Vue.use(Router)
-
+// 路由组件的异步加载
 const Recommend = (resolve) => {
   import('components/recommend/recommend.vue').then((module) => {
     resolve(module)

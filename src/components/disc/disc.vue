@@ -33,8 +33,10 @@ export default {
     this._getSongList() // 获取热门歌单推荐详情页数据
   },
   methods: {
+    // 热门歌单推荐详情页歌曲列表数据
     _getSongList () {
-      if (!this.disc.disstid) {
+      console.log(this.disc.dissid)
+      if (!this.disc.dissid) {
         this.$router.push('/recommend')
         return
       }

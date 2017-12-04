@@ -55,8 +55,9 @@ export default {
     return {
       showFlag: false, // 组件显示，隐藏的控制
 //    query: '',
-      showSinger: false, // // 需不需要在搜索列表中展示歌手的标志位，true是需要展示，false是不需要展示，这里不需要在搜索列表中显现歌手
-      currentIndex: 0,
+      showSinger: false, // 需不需要在搜索列表中展示歌手的标志位，true是需要展示，false是不需要展示，这里不需要在搜索列表中显现歌手
+      currentIndex: 0, // switches组件的默认索引
+      // switches组件的文字内容
       switches: [
         {name: '最近播放'},
         {name: '搜索历史'}
@@ -72,6 +73,7 @@ export default {
     // 显示
     show () {
       this.showFlag = true
+      // add-song默认是隐藏的，当它显示时要重新调用scroll组件的refresh()方法来重新计算滚动列表的高度
       setTimeout(() => {
         if (this.currentIndex === 0) {
           this.$refs.songlist.refresh()
@@ -92,15 +94,18 @@ export default {
       this.saveSearch() // 此函数是在search组件中监听从suggest组件派发出来的select事件的回调函数，此函数里面是一个保存搜索数据saveSearchHistory的Actions
       this.showTip()
     },
+    // 监听switches组件switch事件的回调函数
     switchItem (index) {
       this.currentIndex = index
     },
+    // 点击历史播放列表的歌曲，这首歌插入到当前播放列表中
     selectSong (song, index) {
       if (index !== 0) {
         this.insertSong(new Song(song))
         this.showTip()
       }
     },
+    // 顶部的提示框显示
     showTip () {
       this.$refs.topTip.show()
     },

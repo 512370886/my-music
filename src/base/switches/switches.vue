@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     switchItem (index) {
-      this.$emit('switch', index)
+      this.$emit('switch', index) // 派发一个点击事件，告诉外部我被点击了，以及被点击的索引时什么
     }
   }
 }

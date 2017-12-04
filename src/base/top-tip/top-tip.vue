@@ -9,6 +9,7 @@
 <script type="text/ecmascript-6">
 export default {
   props: {
+    // 有2秒钟的延时隐藏
     delay: {
       type: Number,
       default: 2000
@@ -16,17 +17,19 @@ export default {
   },
   data () {
     return {
-      showFlag: false
+      showFlag: false // 控制该组件的显示和隐藏
     }
   },
   methods: {
+    // 显示
     show () {
       this.showFlag = true
-      clearTimeout(this.timer)
+      clearTimeout(this.timer) // 当show()方法反复被调用时保证延时器只执行一次
       this.timer = setTimeout(() => {
         this.hide()
       }, this.delay)
     },
+    // 隐藏
     hide () {
       this.showFlag = false
     }

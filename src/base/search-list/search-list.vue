@@ -1,5 +1,6 @@
 <template>
   <div class="search-list" v-show="searches.length">
+  	<!--vue不仅给普通的元素提供给transition过渡效果，还给列表提供了transition-group过渡效果，transition-group里对应每个元素都要有不同的key值-->
   	<transition-group name="list" tag="ul">
   		<li :key="item" @click="selectItem(item)" class="search-item" v-for="item in searches">
   		  <span class="text">{{item}}</span>

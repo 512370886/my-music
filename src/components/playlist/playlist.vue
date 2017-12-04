@@ -52,7 +52,7 @@ export default {
   data () {
     return {
       showFlag: false, // 显示，隐藏的控制
-      refreshDelay: 100
+      refreshDelay: 100 // 控制scroll组件的延时调用refresh()方法
     }
   },
   computed: {

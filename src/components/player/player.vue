@@ -300,7 +300,7 @@ export default {
     // audio标签派发的play事件，会在歌曲加载成功播放时触发运行运行，当歌曲ready的时候标志位songReady才为true
     ready () {
       this.songReady = true
-      this.savePlayHistory(this.currentSong)
+      this.savePlayHistory(this.currentSong) // 用一个Action提交相应的Mutation把播放历史数据写入vuex
     },
     // 当因为网络问题或者下一首歌，上一首歌不存在的时候，audio无法加载歌曲的时候，就会触发error函数，以保证在加载歌曲失败的情况下，播放器的功能正常，否则因为加载失败而songReady不能只为true,从而导致所有的点击会失效
     error () {
@@ -348,8 +348,10 @@ export default {
 //    })
 //    this.setCurrentIndex(index)
 //  },
+    // 获取歌曲歌词
     getLyric () {
       this.currentSong.getLyric().then((lyric) => {
+        // 当一首歌的歌词与本身的歌词不匹配时，什么都不做，因为获取歌词的过程是一个异步的过程，防止在快速点击切换的时候，当的歌曲还没加载完成，又加载另外一首歌的歌词，实际上这样就加载了两次歌词，这样就会出现歌词乱掉的情况
         if (this.currentSong.lyric !== lyric) {
           return
         }
@@ -486,7 +488,7 @@ export default {
       if (newSong.id === oldSong.id) {
         return
       }
-      // 当当前歌曲currentSong发生变化时，如果当前的歌曲的歌词还有的话
+      // 当当前歌曲currentSong发生变化时，如果当前的歌曲的歌词还有的话，做的清理动作
       if (this.currentLyric) {
         this.currentLyric.stop()
         this.currentTime = 0
@@ -494,7 +496,7 @@ export default {
         this.currentLineNum = 0
       }
       // 当在微信里播放时，当微信在后台运行时，播放器的js是不会执行的，但audio是可以把当前的歌曲播放完的，当歌曲播放完后会触发audio的end事件，但这个end回调事件下的js不会执行，end回调不执行，当我们再次打开时songReady永远不会置为true,songReady不只为true那么歌曲的切换功能就不能实现了
-      setTimeout(this.timer)
+      clearTimeout(this.timer)
       // 做一个长一点的延时调用play（），可解决使用手机浏览器从后台切到前台后当js执行的问题，这样可以保证手机浏览器从后台切到前台时，歌曲可以重新播放
       this.timer = setTimeout(() => {
         this.$refs.audio.play() // 当currentSong发生变化是调用audio的play方法

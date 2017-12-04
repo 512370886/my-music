@@ -65,12 +65,14 @@ export const playerMixin = {
       })
       this.setCurrentIndex(index)
     },
+    // 收藏歌曲的心形样式的转变，由收藏到不收藏
     getFavoriteIcon (song) {
       if (this.isFavorite(song)) {
         return 'icon-favorite'
       }
       return 'icon-not-favorite'
     },
+    // 往收藏列表添加或者删除一首歌曲
     toggleFavorite (song) {
       if (this.isFavorite(song)) {
         this.deleteFavoriteList(song)
@@ -78,6 +80,7 @@ export const playerMixin = {
         this.saveFavoriteList(song)
       }
     },
+    // 判断一首歌是否在收藏列表里面
     isFavorite (song) {
       const index = this.favoriteList.findIndex((item) => {
         return item.id === song.id
@@ -102,7 +105,7 @@ export const searchMixin = {
   data () {
     return {
       query: '', // 搜索框里的检索词
-      refreshDelay: 100
+      refreshDelay: 100 // 控制scroll组件的延时调用refresh()方法
     }
   },
   computed: {

@@ -17,7 +17,7 @@
   	  	  	  <song-list :songs="favoriteList" @select="selectSong"></song-list>	
   	  	  	</div>
   	  	  </scroll>
-  	  	  <scroll ref="playList" class="list-scroll" :data="playHistory">
+  	  	  <scroll ref="playList" class="list-scroll" v-if="currentIndex===1" :data="playHistory">
   	  	  	<div class="list-inner">
   	  	  	 <song-list :songs="playHistory" @select="selectSong"></song-list>	
   	  	  	</div>
@@ -42,7 +42,8 @@ export default {
   mixins: [playlistMixin],
   data () {
     return {
-      currentIndex: 0,
+      currentIndex: 0, // switches组件的默认索引，实现'我喜欢的'与'最近听的'之间的切换
+      // switches组件的文字内容
       switches: [
         {name: '我喜欢的'},
         {name: '最近听的'}
@@ -50,6 +51,7 @@ export default {
     }
   },
   computed: {
+    // 根据currentIndex来显示
     noResult () {
       if (this.currentIndex === 0) {
         return !this.favoriteList.length
@@ -57,6 +59,7 @@ export default {
         return !this.playHistory.length
       }
     },
+    // 根据currentIndex来显示
     noResultDesc () {
       if (this.currentIndex === 0) {
         return '暂无收藏歌曲'
@@ -70,26 +73,33 @@ export default {
     ])
   },
   methods: {
+    // 列表滚动时底部高度和mini播放器的自适应
     handlePlaylist (playlist) {
       const bottom = playlist.length > 0 ? '60px' : ''
       this.$refs.listWrapper.style.bottom = bottom
-      this.$refs.favoriteList && this.$refs.favoriteList.refresh()
-      this.$refs.playList && this.$refs.playList.refresh()
+      this.$refs.favoriteList && this.$refs.favoriteList.refresh() // 因此组件的显示和隐藏用的是v-if，有可能是不存在的，所以在用之前想判断一下
+      this.$refs.playList && this.$refs.playList.refresh() // 因此组件的显示和隐藏用的是v-if，有可能是不存在的，所以在用之前想判断一下
     },
+    // 监听从switches派发出来的switch的回调，实现'我喜欢的'与'最近听的'之间的切换
     switchItem (index) {
       this.currentIndex = index
     },
+    // 在'我喜欢的'与'最近听的'之间的列表中选择一首歌，把这首歌插入当前播放列表
     selectSong (song) {
       this.insertSong(new Song(song))
     },
+    // 回退到上一个页面
     back () {
       this.$router.back()
     },
     random () {
+      // 根据当前的currentIndex来决定随机播放哪个列表，favoriteList或者playHistory
       let list = this.currentIndex === 0 ? this.favoriteList : this.playHistory
+      // 当播放列表为空的时候，什么都不做
       if (list.length === 0) {
         return
       }
+      // 因此时的list不是一个song的实例，用map去遍历list,然后list里面的每个song都return新的song的实例
       list = list.map((song) => {
         return new Song(song)
       })
